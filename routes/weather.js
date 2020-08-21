@@ -4,7 +4,6 @@ const _ = require('lodash');
 
 const router = express.Router();
 
-
 router.get('/today-v-yesterday', [ zipToLoc, getWeatherToday, getWeatherYesterday ], async ( req, res ) => {
   const hourlyToday = req.query.weatherDataToday.weatherData.data.hourly;
   const hourArrToday = _.slice(hourlyToday, 0, 23)
@@ -30,6 +29,7 @@ router.get('/today-v-yesterday', [ zipToLoc, getWeatherToday, getWeatherYesterda
       avgToday: avgToday,
       maxYesterday: maxYesterday.feels_like,
       maxToday: maxToday.feels_like,
+      diff: diff,
       text: 'it is going to be ' + diffText + ' than yesterday'
     }
   })
@@ -38,7 +38,7 @@ router.get('/today-v-yesterday', [ zipToLoc, getWeatherToday, getWeatherYesterda
 async function getWeatherToday ( req, res, next ) {
   let url = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + req.query.zipData.lat + '&lon=' + req.query.zipData.lng + '&appid=' + process.env.WEATHER_KEY + '&units=imperial';
 
-  weatherData = await getData( url );
+  const weatherData = await getData( url );
   req.query.weatherDataToday = { weatherData };
 
   next();
@@ -52,7 +52,7 @@ async function getWeatherYesterday ( req, res, next ) {
 
   let url = 'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=' + req.query.zipData.lat + '&lon=' + req.query.zipData.lng + '&dt=' + unixYesterday + '&appid=' + process.env.WEATHER_KEY + '&units=imperial';
 
-  weatherData = await getData( url );
+  const weatherData = await getData( url );
   req.query.weatherDataYesterday = { weatherData };
 
   next();
@@ -86,4 +86,3 @@ async function getData ( url ) {
 
 
 module.exports = router;
-
