@@ -22,17 +22,36 @@ router.get('/today-v-yesterday', [ zipToLoc, getWeatherToday, getWeatherYesterda
   
   const diff = Math.round(maxToday.feels_like - maxYesterday.feels_like);
 
-  // console.log(diff)
-  // console.log(diff >= -2)
-  // console.log(-2 >= diff)
-  // console.log(diff < 2)
-  // console.log(diff >= -2 && diff < 2)
-  if (diff >= -2 && diff < 2) {var diffText = 'about the same as'};
-  if (diff >= 2 && diff < 5) {var diffText = 'a little warmer than'};
-  if (diff >= 5) {var diffText = 'a lot warmer than'};
-  if (diff >= -3 && diff < -5) {var diffText = 'a little cooler than'};
-  if (diff <= -5) {var diffText = 'a lot cooler than'};
-  // console.log(diffText)
+  console.log(diff)
+  console.log(diff >= -3)
+  console.log(diff >= -3)
+  console.log(diff > -5)
+  console.log(diff >= -3 && diff < -5)
+  if (diff >= -2 && diff < 2) {
+    var diffText = 'about the same as'
+    var style = 'background_same'
+  };
+
+  if (diff >= 2 && diff < 5) {
+    var diffText = 'a little warmer than'
+    var style = 'background_little_warmer'
+  };
+
+  if (diff >= 5) {
+    var diffText = 'a lot warmer than'
+    var style = 'background_alot_warmer'
+  };
+
+  if (diff >= -3 && diff > -5) {
+    var diffText = 'a little cooler than'
+    var style = 'background_little_cooler'
+  };
+  if (diff <= -5) {
+    var diffText = 'a lot cooler than'
+    var style = 'background_alot_cooler'
+  };
+
+  console.log(diffText)
 
   res.send({
     status: 200,
@@ -44,7 +63,8 @@ router.get('/today-v-yesterday', [ zipToLoc, getWeatherToday, getWeatherYesterda
       maxYesterday: maxYesterday.feels_like,
       maxToday: maxToday.feels_like,
       diff: diff,
-      text: 'it is going to be ' + diffText + ' yesterday'
+      text: 'it is going to be ' + diffText + ' yesterday',
+      style: style
     }
   });
 });
